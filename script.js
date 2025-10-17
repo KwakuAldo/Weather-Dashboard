@@ -1,6 +1,11 @@
-// API configuration
-const API_KEY = "3051a4bfda3c8c88aa4b9c7b7618fd0a";
+// API configuration with environment variable support
+const API_KEY = window.OPENWEATHER_API_KEY || "3051a4bfda3c8c88aa4b9c7b7618fd0a";
 const API_BASE_URL = "https://api.openweathermap.org/data/2.5";
+
+// Check if API key is properly configured
+if (!API_KEY || API_KEY === "your_api_key_here") {
+    console.warn("⚠️ OpenWeatherMap API key not configured. Please set OPENWEATHER_API_KEY environment variable.");
+}
 
 const cityInput = document.getElementById("city-input");
 const searchBtn = document.getElementById("search-btn");

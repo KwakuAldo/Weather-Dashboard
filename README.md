@@ -24,6 +24,7 @@ A modern, responsive weather dashboard built with vanilla JavaScript and Tailwin
 - A modern web browser
 - Node.js (for development)
 - OpenWeatherMap API key (free at [openweathermap.org](https://openweathermap.org/api))
+- Netlify account (for deployment)
 
 ### Installation
 
@@ -52,6 +53,27 @@ A modern, responsive weather dashboard built with vanilla JavaScript and Tailwin
 5. **Open in browser**
    - Simply open `index.html` in your web browser
    - Or use a local server: `python -m http.server 8000`
+
+## 🌐 Deployment
+
+### Netlify Deployment (Recommended)
+
+1. **Fork/Clone this repository**
+2. **Get your OpenWeatherMap API key** from [openweathermap.org](https://openweathermap.org/api)
+3. **Deploy to Netlify:**
+   - Go to [netlify.com](https://netlify.com)
+   - Click "New site from Git"
+   - Connect your GitHub account and select this repository
+   - Set build command: `npm run build`
+   - Set publish directory: `.` (root)
+   - Add environment variable: `OPENWEATHER_API_KEY` = your API key
+   - Click "Deploy site"
+
+4. **Your site will be live!** 🎉
+
+### Manual Deployment
+
+For other hosting platforms, simply upload all files to your web server. The app will work with the fallback API key, but for production use, set the `OPENWEATHER_API_KEY` environment variable.
 
 ## 🛠️ Development
 
@@ -89,6 +111,15 @@ This project uses the [OpenWeatherMap API](https://openweathermap.org/api) to fe
 
 - `GET /weather` - Current weather data
 - `GET /forecast` - 5-day weather forecast
+
+### Environment Variables
+
+For security, the API key is managed through environment variables:
+
+- **Development**: Uses fallback key (limited usage)
+- **Production**: Set `OPENWEATHER_API_KEY` environment variable
+- **Netlify**: Add in Site Settings → Environment Variables
+- **Local**: Create `.env` file with `OPENWEATHER_API_KEY=your_key_here`
 
 ## 🎨 Customization
 
