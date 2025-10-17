@@ -60,6 +60,7 @@
                     id="city-input" 
                     placeholder="Enter city name..." 
                     aria-label="Enter city name for weather search"
+                    autocomplete="off"
                     class="w-full px-4 py-3 rounded-lg border border-white/30 bg-white/20 text-white placeholder-white/70 focus:ring-2 focus:ring-white/50 focus:border-transparent outline-none transition-all duration-200"
                 >
                 <button 
@@ -69,6 +70,11 @@
                 >
                     Search
                 </button>
+                
+                <!-- City Suggestions Dropdown -->
+                <div id="city-suggestions" class="absolute top-full left-0 right-0 mt-1 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-white/20 max-h-60 overflow-y-auto z-50 hidden">
+                    <!-- Suggestions will be populated here -->
+                </div>
             </div>
         </div>
 

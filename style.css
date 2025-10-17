@@ -54,6 +54,38 @@ body {
   background: #2563EB;
 }
 
+/* City suggestions dropdown */
+#city-suggestions {
+  scrollbar-width: thin;
+  scrollbar-color: #3B82F6 #e5e7eb;
+}
+
+#city-suggestions::-webkit-scrollbar {
+  width: 6px;
+}
+
+#city-suggestions::-webkit-scrollbar-track {
+  background: #e5e7eb;
+  border-radius: 3px;
+}
+
+#city-suggestions::-webkit-scrollbar-thumb {
+  background: #3B82F6;
+  border-radius: 3px;
+}
+
+#city-suggestions::-webkit-scrollbar-thumb:hover {
+  background: #2563EB;
+}
+
+.city-suggestion {
+  transition: all 0.2s ease;
+}
+
+.city-suggestion:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }

@@ -13,24 +13,165 @@ const weatherInfo = document.getElementById("weather-info");
 const forecastInfo = document.getElementById("forecast-info");
 const loading = document.getElementById("loading");
 const error = document.getElementById("error");
+const citySuggestions = document.getElementById("city-suggestions");
+
+// Debouncing variables
+let debounceTimer;
+let selectedSuggestionIndex = -1;
+let currentSuggestions = [];
 
 // Event listeners
 searchBtn.addEventListener("click", () => {
     const city = cityInput.value.trim();
     if (city) {
         getWeatherData(city);
+        hideSuggestions();
     }
 });
 
 // Add Enter key support
 cityInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
+        e.preventDefault();
         const city = cityInput.value.trim();
         if (city) {
             getWeatherData(city);
+            hideSuggestions();
         }
     }
 });
+
+// Input event with debouncing
+cityInput.addEventListener("input", (e) => {
+    const query = e.target.value.trim();
+    
+    // Clear previous timer
+    clearTimeout(debounceTimer);
+    
+    if (query.length >= 2) {
+        // Debounce the search
+        debounceTimer = setTimeout(() => {
+            searchCities(query);
+        }, 300); // 300ms delay
+    } else {
+        hideSuggestions();
+    }
+});
+
+// Keyboard navigation for suggestions
+cityInput.addEventListener("keydown", (e) => {
+    if (!citySuggestions.classList.contains("hidden")) {
+        switch (e.key) {
+            case "ArrowDown":
+                e.preventDefault();
+                selectedSuggestionIndex = Math.min(selectedSuggestionIndex + 1, currentSuggestions.length - 1);
+                updateSuggestionSelection();
+                break;
+            case "ArrowUp":
+                e.preventDefault();
+                selectedSuggestionIndex = Math.max(selectedSuggestionIndex - 1, -1);
+                updateSuggestionSelection();
+                break;
+            case "Escape":
+                hideSuggestions();
+                break;
+        }
+    }
+});
+
+// Click outside to close suggestions
+document.addEventListener("click", (e) => {
+    if (!e.target.closest("#city-input") && !e.target.closest("#city-suggestions")) {
+        hideSuggestions();
+    }
+});
+
+// City search function with debouncing
+async function searchCities(query) {
+    try {
+        // Show loading state
+        citySuggestions.innerHTML = `
+            <div class="px-4 py-3 text-center text-gray-600">
+                <div class="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-weather-blue mr-2"></div>
+                Searching cities...
+            </div>
+        `;
+        citySuggestions.classList.remove("hidden");
+        
+        const response = await fetch(
+            `${API_BASE_URL}/find?q=${encodeURIComponent(query)}&appid=${API_KEY}&units=metric&cnt=5`
+        );
+        
+        if (!response.ok) {
+            throw new Error(`City search API error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        displayCitySuggestions(data.list || []);
+        
+    } catch (err) {
+        console.error("Error searching cities:", err);
+        hideSuggestions();
+    }
+}
+
+// Display city suggestions
+function displayCitySuggestions(cities) {
+    if (cities.length === 0) {
+        hideSuggestions();
+        return;
+    }
+    
+    currentSuggestions = cities;
+    selectedSuggestionIndex = -1;
+    
+    citySuggestions.innerHTML = cities.map((city, index) => `
+        <div class="city-suggestion px-4 py-3 hover:bg-white/20 cursor-pointer transition-colors duration-200 border-b border-white/10 last:border-b-0" 
+             data-index="${index}" 
+             data-city="${city.name}" 
+             data-country="${city.sys.country}">
+            <div class="font-medium text-gray-800">${city.name}</div>
+            <div class="text-sm text-gray-600">${city.sys.country} • ${city.coord.lat.toFixed(2)}, ${city.coord.lon.toFixed(2)}</div>
+        </div>
+    `).join('');
+    
+    // Add click listeners to suggestions
+    citySuggestions.querySelectorAll('.city-suggestion').forEach((suggestion, index) => {
+        suggestion.addEventListener('click', () => {
+            selectCity(cities[index]);
+        });
+    });
+    
+    citySuggestions.classList.remove("hidden");
+}
+
+// Update suggestion selection highlighting
+function updateSuggestionSelection() {
+    const suggestions = citySuggestions.querySelectorAll('.city-suggestion');
+    
+    suggestions.forEach((suggestion, index) => {
+        if (index === selectedSuggestionIndex) {
+            suggestion.classList.add('bg-white/20');
+            suggestion.scrollIntoView({ block: 'nearest' });
+        } else {
+            suggestion.classList.remove('bg-white/20');
+        }
+    });
+}
+
+// Select a city from suggestions
+function selectCity(city) {
+    cityInput.value = `${city.name}, ${city.sys.country}`;
+    hideSuggestions();
+    getWeatherData(`${city.name}, ${city.sys.country}`);
+}
+
+// Hide suggestions dropdown
+function hideSuggestions() {
+    citySuggestions.classList.add("hidden");
+    currentSuggestions = [];
+    selectedSuggestionIndex = -1;
+}
 
 // Main search function
 async function getWeatherData(city) {
