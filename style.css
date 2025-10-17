@@ -12,6 +12,8 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
   background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
   min-height: 100vh;
+  position: relative;
+  padding-bottom: 0;
 }
 
 /* Weather card component */
@@ -77,6 +79,20 @@ body {
   animation: slideUp 0.3s ease-out;
 }
 
+/* Footer positioning */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+/* Ensure content doesn't get hidden behind footer */
+main {
+  padding-bottom: 100px; /* Adjust based on footer height */
+}
+
 /* Responsive adjustments */
 @media (max-width: 640px) {
   .weather-card {
@@ -86,5 +102,9 @@ body {
   .container {
     padding-left: 8px;
     padding-right: 8px;
+  }
+  
+  main {
+    padding-bottom: 80px; /* Smaller padding on mobile */
   }
 }
