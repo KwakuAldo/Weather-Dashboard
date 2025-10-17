@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  body {
+    @apply font-sans bg-gradient-to-br from-weather-blue to-blue-600 min-h-screen;
+  }
+}
+
+@layer components {
+  .weather-card {
+    @apply bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-white/20;
+  }
+  
+  .weather-gradient {
+    @apply bg-gradient-to-r from-weather-blue to-blue-500;
+  }
+  
+  .search-input {
+    @apply w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-weather-blue focus:border-transparent outline-none transition-all duration-200;
+  }
+  
+  .weather-btn {
+    @apply px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:scale-105 active:scale-95;
+  }
+  
+  .weather-btn-primary {
+    @apply weather-btn bg-weather-blue text-white hover:bg-blue-600 shadow-lg hover:shadow-xl;
+  }
+  
+  .weather-btn-secondary {
+    @apply weather-btn bg-white/20 text-white border border-white/30 hover:bg-white/30;
+  }
+}

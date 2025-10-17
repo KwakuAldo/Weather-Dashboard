@@ -1,0 +1,21 @@
+{
+  "name": "weather-dashboard",
+  "version": "1.0.0",
+  "description": "A modern weather dashboard built with Tailwind CSS",
+  "main": "index.html",
+  "scripts": {
+    "build-css": "tailwindcss -i ./src/input.css -o ./style.css --watch",
+    "build-css-prod": "tailwindcss -i ./src/input.css -o ./style.css --minify"
+  },
+  "keywords": [
+    "weather",
+    "dashboard",
+    "tailwind",
+    "javascript"
+  ],
+  "author": "Aldo",
+  "license": "MIT",
+  "devDependencies": {
+    "tailwindcss": "^3.4.18"
+  }
+}
